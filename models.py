@@ -1,9 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Metadata
+from flask_sqlalchemy import MetaData
 
 #What do they even mean? 
-metadata = Metadata
+metadata = MetaData
 db = SQLAlchemy(metadata= metadata)
+
+
 
 
 #create the classes of the Todo app. 
