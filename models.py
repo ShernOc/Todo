@@ -24,6 +24,10 @@ class User(db.Model):
     #create a relationship with the Todo Table
     todo = db.relationship("Todo",backref="user", lazy = True)
     
+    #repr methods returns a string
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.is_approved}',{self.password} ,{self.todo})" 
+    
 # Tag Table
 class Tag(db.Model):
     __table__ = "Tag"
@@ -33,6 +37,9 @@ class Tag(db.Model):
 
     #Create a relationship
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"),nullable = False)
+    
+    def __repr__(self):
+        return f"User('{self.name}', '{self.user_id}')"
     
 # To-do table :  
 class Todo(db.Model):
@@ -47,6 +54,10 @@ class Todo(db.Model):
     #create a relationship 
     user_id = db.Column(db.Integer,db.ForeignKey("user.id"), nullable= False)
     tag_id = db.Column(db.Integer,db.ForeignKey("tag.id"), nullable= False)
+    
+    def __repr__(self):
+        return f"User('{self.title}', '{self.description}', '{self.is_complete}',{self.deadline} ,{self.user_id}, {self.tag_id})"
+    
     
     
 
