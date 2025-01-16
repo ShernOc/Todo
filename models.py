@@ -21,11 +21,11 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable = False)
     
     #create a relationship with the Todo Table
-    todos = db.relationship("Todo",back_populates="Users")
+    todos = db.relationship("Todo",back_populates="user", lazy =True)
     
     #repr methods returns a string
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.is_approved}',{self.password} ,{self.todo})" 
+        return f"User('{self.username}', '{self.email}', '{self.is_approved}',{self.password} ,{self.todos})" 
     
 # Tag Table
 class Tag(db.Model):
@@ -35,14 +35,14 @@ class Tag(db.Model):
     name = db.Column(db.String(128), nullable=False)
 
     #Create a relationship
-    todos = db.relationship("Todo", back_populates ="Tags")
+    todos = db.relationship("Todo", back_populates ="tag", lazy= True)
     
     def __repr__(self):
-        return f"User('{self.name}', '{self.user_id}')"
+        return f"Users('{self.name}')"
     
 # To-do table :  
 class Todo(db.Model):
-    __tablename__ = "Todo"
+    __tablename__ = "Todos"
     
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(128), nullable = False)
@@ -53,9 +53,15 @@ class Todo(db.Model):
     #create a relationship 
     user_id = db.Column(db.Integer,db.ForeignKey("Users.id"), nullable= False)
     tag_id = db.Column(db.Integer,db.ForeignKey("Tags.id"), nullable= False)
+    # Relationships
+    user = db.relationship("User", back_populates="todos")
+    tag = db.relationship("Tag", back_populates="todos")
+    
     
     def __repr__(self):
-        return f"User('{self.title}', '{self.description}', '{self.is_complete}',{self.deadline} ,{self.user_id}, {self.tag_id})"
+        return f"Users('{self.title}', '{self.description}', '{self.is_complete}',{self.deadline} ,{self.user_id}, {self.tag_id})"
+    
+     
     
     
     

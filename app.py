@@ -39,3 +39,20 @@ def todo():
 #Run the application: 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+    
+# #To add 
+# user = User()
+# db.session.add(user)
+# db.session.commit()
+
+
+# #To update/modify data 
+# user.verified = True
+# db.session.commit()
+
+# #to delete
+# db.session.delete(user)
+# db.session.commit()
+
+
+    
