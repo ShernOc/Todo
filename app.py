@@ -29,7 +29,22 @@ def index():
 #Fetch/Get Users 
 @app.route('/users')
 def get_users():
-    return jsonify({["events A", "event B"]})
+    #query.all gets all the users. 
+    users = User.query.all()
+    #Convert users to json 
+    #create an empty list that will store the users 
+    user_list = []
+    
+    #create a loop that will loop through users 
+    for user in users: 
+        #in the append pass it as an json objects
+        user_list.append({
+            "id": user.id,
+            "username":user.username,
+            "email":user.email,
+            "is_approved":user.is_approved  
+        })
+    return jsonify(user_list)
 
 #Add a Users/ Add you use the method POST 
 #1. Receive the data in json: 
@@ -61,10 +76,59 @@ def add_users():
         db.session.commit()
         return jsonify({"Success": "Users added successfully"})
 
+#UPDATE USER: 
+#you can update the name, password,email .. 
+@app.route('/users/<user_id>', methods= ["PATCH"])
+def update_username(user_id):
+    #check if user exists by query.get( which is a default using the get)
+    user = User.query.get(user_id)
+    
+    if user: # if user exist
+        #get the data 
+        data = request.get_json()
+        username = data['username']
+        email = data['email']
+        password = data['password']
+        
+        #get username and the id is not equal to the username we are searching. 
+        #Check if the username or the id is not equal to the id. 
+        check_username = User.query.filter_by(username=username and id!=user.id).first()
+        check_email = User.query.filter_by(email = email and id!=user.id).first()
+        
+        if check_username or check_email:
+            return jsonify({"error": "Username/Email already exist"}), 406
+        
+        #and if not, 
+        else: 
+            #user is the user that was fetched user = User.query.get(user_id)
+            user.username = username
+            user.email = email
+            user.password = password 
+        
+        #Just commit no adding. 
+            db.session.commit()
+            return jsonify({"Success": "Users updated successfully"}), 201
+#if the user does not exist? 
+    else:
+        return jsonify({"error": "User does not exist"}), 406
+    
+    
+#DELETE USER; 
+@app.route('/users/<int:user_id>',methods=['DELETE'])
+           
+def delete_user(user_id):
+    #get the users
+    user = User.query.get(user_id)
+    
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"Sucess":"User Deleted Successfully"})
+
+    else:
+         return jsonify({"Error": "User does not exist"})
 
 
 
-
-
-#Connect to the POSTMAN
-#1. Copy the Url http://127.0.0.1:5000
+          
+    

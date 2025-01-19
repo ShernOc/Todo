@@ -42,6 +42,14 @@
 #6 return jsonify({Successfully})
 
 #Connect to the Postman
+#Connect to the POSTMAN
+#1. Copy the Url http://127.0.0.1:5000
+
+
+#   QUESTIONS
+#How to update just the name? 
+#How to 
+
 
 
 
