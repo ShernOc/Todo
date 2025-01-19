@@ -127,6 +127,114 @@ def delete_user(user_id):
 
     else:
          return jsonify({"Error": "User does not exist"})
+     
+# =========================TAG=================
+
+#Fetch/Get Tags
+@app.route('/tags')
+def get_tags():
+    #query.all gets all the tags 
+    tags = Tag.query.all()
+    #created an empty list: 
+    tag_list = []
+
+    for tag in tags:
+        tag_list.append({
+            "id":tag.id,
+            "name":tag.name
+        })
+    return jsonify(tag_list)
+
+#ADD A TAG: 
+@app.route('/tags', methods=["POST"])
+def add_tag():
+    #initialize the data 
+    data = request.get_json()
+    name = data['name']
+    
+    # check if the name exist 
+    check_name = Tag.query.filter_by(name=name).first()
+    
+    #print the outcome 
+    print("name", check_name)
+    
+    if check_name:
+        return jsonify({"error":"Name does not exist"}) , 406 
+    else: 
+        #add the tag name 
+        new_name = Tag(name=name)
+        #call/commit
+        db.session.add(new_name)
+        db.session.commit()
+        return jsonify({"Success": "Name added successfully"})
+    
+ #UPDATE TAG 
+@app.route('/tags/<string:name>', methods = ['PATCH'])
+def update_tags(name):
+    tags = Tag.query.get(name)
+    
+    #check if they exist 
+    if tags: 
+        return jsonify({"Error": "Name already exist"})
+    
+    else: 
+        #get the data. 
+        #convert to json
+        data = request.get_json()
+        name = data['name']
+        
+        check_name =Tag.query.
+        
+    
+# def update_tags(name)
+#     #check if user exists by query.get( which is a default using the get)
+#     tags = Tag.query.get(d)
+    
+#     if user: # if user exist
+#         #get the data 
+#         data = request.get_json()
+#         username = data['username']
+#         email = data['email']
+#         password = data['password']
+        
+#         #get username and the id is not equal to the username we are searching. 
+#         #Check if the username or the id is not equal to the id. 
+#         check_username = User.query.filter_by(username=username and id!=user.id).first()
+#         check_email = User.query.filter_by(email = email and id!=user.id).first()
+        
+#         if check_username or check_email:
+#             return jsonify({"error": "Username/Email already exist"}), 406
+        
+#         #and if not, 
+#         else: 
+#             #user is the user that was fetched user = User.query.get(user_id)
+#             user.username = username
+#             user.email = email
+#             user.password = password 
+        
+#         #Just commit no adding. 
+#             db.session.commit()
+#             return jsonify({"Success": "Users updated successfully"}), 201
+# #if the user does not exist? 
+#     else:
+#         return jsonify({"error": "User does not exist"}), 406
+    
+    
+# #DELETE USER; 
+# @app.route('/users/<int:user_id>',methods=['DELETE'])
+           
+# def delete_user(user_id):
+#     #get the users
+#     user = User.query.get(user_id)
+    
+#     if user:
+#         db.session.delete(user)
+#         db.session.commit()
+#         return jsonify({"Sucess":"User Deleted Successfully"})
+
+#     else:
+#          return jsonify({"Error": "User does not exist"})
+
 
 
 
