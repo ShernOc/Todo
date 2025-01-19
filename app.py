@@ -123,7 +123,7 @@ def delete_user(user_id):
     if user:
         db.session.delete(user)
         db.session.commit()
-        return jsonify({"Sucess":"User Deleted Successfully"})
+        return jsonify({"Success":"User Deleted Successfully"})
 
     else:
          return jsonify({"Error": "User does not exist"})
@@ -169,22 +169,48 @@ def add_tag():
         return jsonify({"Success": "Name added successfully"})
     
  #UPDATE TAG 
-@app.route('/tags/<string:name>', methods = ['PATCH'])
-def update_tags(name):
-    tags = Tag.query.get(name)
+@app.route('/tags/<tag_id>', methods = ['PATCH'])        
+def update_tag(tag_id):
+    tag = Tag.query.get(tag_id)
     
-    #check if they exist 
-    if tags: 
-        return jsonify({"Error": "Name already exist"})
-    
-    else: 
-        #get the data. 
-        #convert to json
+    #check if tag id exists 
+    if tag: 
         data = request.get_json()
         name = data['name']
         
-        check_name =Tag.query.
+        #check if id in not equal to the name
+        check_name =Tag.query.filter_by(name = name and id!=tag_id).first()
         
+        if check_name: 
+            return jsonify({"Error": "Name already exist"})
+    
+        else: 
+        #we are now going to update the tag 
+            tag.name = name 
+        #commit it
+            db.session.commit()
+            return jsonify({"Success": "Name was successfully updated"}) , 201 
+    
+    else:
+        return jsonify({"Error": "Name does not exist"}), 406
+
+#Delete Tag: 
+@app.route('/tags/<int:tag_id>', methods = ["DELETE"])
+def delete_tag(tag_id):
+    #get all the data 
+    tag = Tag.query.get(tag_id)
+    
+    if tag: 
+        db.session.delete(tag)
+        db.session.commit()
+        return jsonify({"Success":"Tag deleted successfully"})
+    
+    else:
+        return jsonify({"Error":"Tag does not exist"})
+    
+    
+#=================TODO==============
+
     
 # def update_tags(name)
 #     #check if user exists by query.get( which is a default using the get)
@@ -237,6 +263,3 @@ def update_tags(name):
 
 
 
-
-          
-    
