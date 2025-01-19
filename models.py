@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
-
 #What do they even mean? 
 metadata = MetaData()
 db = SQLAlchemy(metadata= metadata)
