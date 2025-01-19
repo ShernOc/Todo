@@ -13,6 +13,17 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 migrate = Migrate(app,db)
 db.init_app(app)
 
+
+#import all the functions in views 
+from views import * 
+
+#register the blueprints 
+app.register_blueprint(user_bp)
+app.register_blueprint(tag_bp)
+app.register_blueprint(todo_bp)
+
+
+
 #create the router 
 @app.route('/')
 def index():
