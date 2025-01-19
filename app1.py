@@ -247,9 +247,9 @@ def get_todo():
     return jsonify({"Todo-List ": todo_list})
 
 #fetch one Todo based on id 
-@app.route('/tags/<int:id>')
+@todo_bp.route('/todos/<int:id>')
 def fetch_one_todo(id):
-    todo= Tag.query.get(id)
+    todo= Todo.query.get(id)
     
     if todo:
         return jsonify({

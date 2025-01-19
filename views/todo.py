@@ -31,9 +31,9 @@ def get_todo():
     return jsonify({"Todo-List ": todo_list})
 
 #fetch one Todo based on id 
-@todo_bp.route('/tags/<int:id>')
+@todo_bp.route('/todos/<int:id>')
 def fetch_one_todo(id):
-    todo= Tag.query.get(id)
+    todo= Todo.query.get(id)
     
     if todo:
         return jsonify({
@@ -48,6 +48,7 @@ def fetch_one_todo(id):
     else: 
         return jsonify({"Error":"Tag doesn't exist"})
     
+  
 #Add a todo list 
 @todo_bp.route('/todos', methods= ['POST'])
 def add_todo():
