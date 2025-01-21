@@ -1,0 +1,83 @@
+from flask import jsonify,request,Blueprint
+from backend.models import db,User
+from werkzeug.security import check_password_hash
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+
+auth_bp= Blueprint('auth_bp', __name__)
+
+# Create the login/logout blueprint functions
+
+#login 
+@auth_bp.route('/login', methods = ["POST"])
+#we want to get the data from the user( email,password) 
+def login():
+    data = request.get_json()
+    email = data['email']
+    password = data['password']
+    
+    # check if we have the user already exist in the database 
+    user = User.query.filter_by(email=email).first()
+    
+    #check if password_hash by importing : from werkzeug.security import generate_password_hash
+    #if user exist and check password hash, and password from the user, and database create a Token
+    if user and check_password_hash(user.password,password):
+        #each token is linked to a user: they have different token
+        
+        access_token = create_access_token(identity=user.id)
+        return jsonify({"access_token":access_token})
+    
+        # return jsonify({"Success": "Correct submission"}), 200
+    else: 
+        return jsonify({"Error": "Email/User is incorrect"}), 404
+    
+    # Next go to Postman and add a Login request 
+    
+    #CREATE TOKEN: 
+    #Access token is like a password: 
+    #1. import : from flask_jwt_extended import create_access_token
+    #Next import the create 
+    #    access_token = create_access_token(pass a value ) :
+    #NB: Token is linked to a specific user: (indentity=user.id)
+    # 3. Next you now return in 
+    # return jsonify({"access_token":access_token})
+    
+    
+    #NEXT: GETTING THE CURRENT USER 
+    # 1. Pass the token 
+    # 2. protecting the route. 
+    #     - import the jwt_required 
+    # 3. create a current_user route ()
+@auth_bp.route('/current_user', methods = ['GET'] )
+  #Protect the route we use @jwt_required decorator, for any route that need protection.
+@jwt_required()
+def current_user(): 
+    # to get the current user we use the get_jwt_identity. 
+    # dont forget to import it.
+    current_user_id =  get_jwt_identity()
+    
+    # to get the current user
+    user = User.query.get(current_user_id)
+    
+    # Go to what is needed to be filled from a User: 
+    user_data = [{
+            "id": user.id,
+            "username":user.username,
+            "email":user.email, 
+            "is_approved":user.is_approved}]
+    
+    return jsonify({"Current_user": user_data})
+    
+    # print(current_user_id) # 
+    #You have to pass the token to the jwt_required
+    
+    # Pass: Copy the token:Go to authorization: 
+    
+    
+    
+    
+    
+   
+    
+    
+     
+#logout function 

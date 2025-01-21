@@ -1,3 +1,5 @@
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 #FLASK NOTES: 
 
 #Update user 
@@ -69,6 +71,97 @@
 # username = data.get('username', user.username)
 
 # is_complete: in models 
+
+
+#AUTHENTICATION 
+#Authentication: verifying users identity 
+# Authorization: verification of what a user can user. 
+
+# - Password needs to be hashed in the user.py (from werkzeug.security import generate_password_hash)
+
+#STEPS: 
+#1.  install the pip install flask-jwt-extended
+#2. Go to the app.py and : 
+
+# imports/ Configuration
+# 1. import the jwt (from flask_jwt_extended import JWTManager) 
+# 2. Setup the Flask-JWT-Extended extension
+# app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
+
+# # 3. Add when the authorization will expire: 
+# app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
+
+# jwt = JWTManager(app) # instance of jwt 
+# #4.  initialize the jwt 
+# jwt.init_app(app)
+
+#STEP 2 
+
+#1. create go to views folder and create the auth file. 
+#2. add the auth file to the __init__ py by importing. 
+
+# 3. create a blue print in the auth. 
+
+#4. create a blueprint for it : in the auth.py copy: 
+# from flask import jsonify,request,Blueprint
+# from backend.models import db,User
+
+# auth_bp= Blueprint('auth_bp', __name__)
+
+# 5. Create the login/ logout functions in the auth.py 
+
+#PROTECT THE ROUTES: 
+#Protected the with jwt_required, get_jwt_identity
+# 5 To protect the route : jwt_required, get_jwt_identity: should be added in all the routes that need protections 
+
+# 1. import: from jwt_extended import jwt_required, get_jwt_identity
+    
+@user_bp.route('/users', methods=["POST"])
+# add the jwt_required decorator 
+@jwt_required()
+def add_users():
+    data = request.get_json() 
+    #current_user_id will get the user id. then we can remove anything related to user and replace it with current_user_id.
+    current_user_id = get_jwt_identity()
+    
+    username = data['username']
+    email = data['email']
+    password = data['password']
+    is_admin = data['is_admin']
+    
+#3. Check if the users/email exists
+
+    current_user_id 
+    check_username = User.query.filter_by(username=username).first() # first selects the first username in order. 
+    check_email= User.query.filter_by(email=email).first()
+
+#4. create an error message if the username or email exists, if yes: return an error message 200/ is just an indication of the error
+    #prints the output 
+    print("Username", check_username)
+    print("Email", check_email)
+    
+    if check_username or check_email: 
+        return jsonify({"error":"username/email already exist"}),406
+    else:  # This is where we now add the new username
+        new_user = User(username = username, email = email, password = password )
+#5. Next you now update/by calling the db.session.add(new_user) db.session.commit()
+
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"Success": "Users added successfully"})
+
+
+
+
+
+ 
+
+
+
+
+
+
+
 
 
 

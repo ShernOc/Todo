@@ -1,13 +1,15 @@
 from flask import jsonify,request,Blueprint
 from backend.models import db,User
+from werkzeug.security import generate_password_hash
+
+from jwt_extended import jwt_required, get_jwt_identity
+
 
 #create a blueprint variable 
 #Blueprint(takes in two parameters, the name of blueprint and , __name__) 
 user_bp = Blueprint('user_bp', __name__)
 
 #change all the @app to user_bp
-
-
 
 #Fetch/Get Users 
 @user_bp.route('/users')
@@ -25,6 +27,8 @@ def get_users():
             "id": user.id,
             "username":user.username,
             "email":user.email,
+            # Allows for when fetching a user You are able to see if they are admin or not. 
+            "is_admin":user.is_admin,
             "is_approved":user.is_approved,
             #  Use the list comprehension for fetching purposes:
             # Fetching that  allows you to fetch individually a user with its todo or action  
@@ -50,6 +54,7 @@ def add_users():
     username = data['username']
     email = data['email']
     password = data['password']
+    is_admin = data['is_admin']
     
 #3. Check if the users exists
     check_username = User.query.filter_by(username=username).first() # first selects the first username in order. 

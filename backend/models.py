@@ -19,7 +19,7 @@ class User(db.Model):
     is_approved = db.Column(db.Boolean, default = False)
     password = db.Column(db.String(120), nullable = False)
     
-    # Another section is created for an admin 
+    # Another section is created for an admin  in models: for adming 
     #ADMIN 
     is_admin = db.Column(db.Boolean, default = False)
     
@@ -27,7 +27,7 @@ class User(db.Model):
     
     #FETCHING PURPOSE 
     #create a relationship with the Todo Table
-    #Allows us to create a fetcheing 
+    #Allows us to create a fetching 
     todos = db.relationship("Todo",back_populates="user", lazy =True)
     
     #repr methods returns a string

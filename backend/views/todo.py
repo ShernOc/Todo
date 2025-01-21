@@ -1,15 +1,20 @@
 from flask import jsonify,request,Blueprint
 from backend.models import db,Todo, User, Tag
 from datetime import datetime
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 todo_bp = Blueprint('todo_bp', __name__)
 
 #================Todo=====SECTION === 
 #fetch all todos
 @todo_bp.route('/todos')
+@jwt_required()
 def get_todo():
+    current_user_id = get_jwt_identity()
     #get all the todos 
-    todos = Todo.query.all()
+    # todos = Todo.query.all()
+    # this will allow us generate todo based on user alone with the token 
+    todos = Todo.query.filter_by(user_id = current_user_id)
     #create an empty list of tod 
     todo_list = []
     
@@ -50,12 +55,18 @@ def fetch_one_todo(id):
   
 #Add a todo list 
 @todo_bp.route('/todos', methods= ['POST'])
+
+#jwt_required added for checking the user id 
+@jwt_required()
 def add_todo():
+    #add/ get the current_user_id = get_jwt_identity()
+    current_user_id = get_jwt_identity()
     #initialize the data 
     data = request.get_json()
     title = data.get('title')
     description=data.get('description')
-    user_id=data.get('user_id')
+    # user_id=data.get('user_id') : removed now we only have to use current_user_id 
+    
     tag_id= data.get('tag_id')
     try:
         deadline = datetime.strptime(data.get('deadline'), "%Y-%m-%d %H:%M:%S")
@@ -63,15 +74,19 @@ def add_todo():
         return jsonify({"error":"invalid datetime"})
     
     #check if they exist: 
-    check_user_id = User.query.get(user_id)
+    #removed because we dont need it
+    # check_user_id = User.query.get(user_id)
     check_tag_id = Tag.query.get(tag_id)
     
     #if they dont exist, then 
-    if not check_user_id or not check_tag_id:
+    # if not check_user_id or not check_tag_id:
+    if not check_tag_id:
         return jsonify({"Error": "Todo does not exist"}), 406
     
     else: 
-        new_todo = Todo(title = title, description = description, user_id = user_id, tag_id = tag_id, deadline = deadline)
+        new_todo = Todo(title = title, description = description, 
+        # user_id = user_id, removed to be user_id = current_user_id
+        user_id = current_user_id,tag_id = tag_id, deadline = deadline)
         db.session.add(new_todo)
         db.session.commit()
         return jsonify({"Success":"Todo added successfully" })
@@ -109,6 +124,7 @@ def update_todos(todo_id):
             todo.tag_id = tag_id
             todo.deadline = deadline
             todo.user_id = user_id
+            todo.is_complete = is_complete
         
         #calling the function
             db.session.commit()
