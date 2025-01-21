@@ -19,4 +19,23 @@ d. In the Todo
 -Update a Todo
 - Delete a Todo 
 
+#VITE/TAILWIND INSTALLATION
+
+1. Create a front-end folder 
+Install react application with vite/tailwind
+2. REACT COMPONENTS:
+- create the files
+- import the apps in app.py
+app.jsx
+download the react-dom
+
+=
+ - <Route>
+  <route path>
+
+
+  datetime: 
+  
+  The datetime class requires at least three arguments: year, month, and day. You provided only one argument: data['date'].
+
 
