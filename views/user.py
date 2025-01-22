@@ -1,8 +1,8 @@
 from flask import jsonify,request,Blueprint
-from backend.models import db,User
+from models import db,User
 from werkzeug.security import generate_password_hash
 
-from jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 #create a blueprint variable 
@@ -35,11 +35,11 @@ def get_users():
             # ++ todos = db.relationship("Todo",back_populates="user", lazy =True) 
                "todo":[
                 {
-                    "id":todo.id,
-                    "title":todo.title,
-                    "description":todo.description,
+                    "id":todos.id,
+                    "title":todos.title,
+                    "description":todos.description,
     
-                } for todo in user.todo
+                } for todos in user.todos
             ] 
         })
     return jsonify(user_list)

@@ -1,7 +1,7 @@
 #import the flask 
 from flask import Flask, jsonify, request 
 from flask_migrate import Migrate
-from models import User,Tag,Todo, db
+from models import User, Todo, Tag, db
 # authentication from flask jwd 
 from flask_jwt_extended import JWTManager
 
@@ -9,17 +9,16 @@ from flask_jwt_extended import JWTManager
 from datetime import timedelta
 #importation for backend. 
 
-import sys
-from pathlib import Path
+# import sys
+# from pathlib import Path
 
-sys.path.append(str(Path(__file__).parent.resolve()))
+# sys.path.append(str(Path(__file__).parent.resolve()))
 
 #create a flask class 
 app = Flask(__name__)
 
 # #create a migration. config parameters
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
-
 
 #initialize the router 
 migrate = Migrate(app,db)
@@ -40,7 +39,7 @@ app.register_blueprint(auth_bp)
 # imports/ Configuration
 # 1. import the jwt (from flask_jwt_extended import JWTManager) 
 # 2. Setup the Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
+app.config["JWT_SECRET_KEY"] = "sherlyne_Ochieng"
 
 # 3. Add when the authorization will expire: 
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)

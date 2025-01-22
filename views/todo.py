@@ -1,5 +1,5 @@
 from flask import jsonify,request,Blueprint
-from backend.models import db,Todo, User, Tag
+from models import db,Todo, User, Tag
 from datetime import datetime
 from flask_jwt_extended import jwt_required, get_jwt_identity
 

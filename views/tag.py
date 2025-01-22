@@ -1,5 +1,5 @@
 from flask import jsonify,request,Blueprint
-from backend.models import db,Tag
+from models import db,Tag
 
 tag_bp= Blueprint('tag_bp', __name__)
 
