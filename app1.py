@@ -1,7 +1,7 @@
 #import the flask 
 from flask import Flask, jsonify, request 
 from flask_migrate import Migrate
-from backend.models import User,Tag,Todo, db
+from models import User,Tag,Todo, db
 
 #create a flask class 
 app = Flask(__name__)

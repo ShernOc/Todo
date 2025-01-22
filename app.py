@@ -1,11 +1,11 @@
 #import the flask 
 from flask import Flask, jsonify, request 
 from flask_migrate import Migrate
-from backend.models import User,Tag,Todo, db
+from models import User,Tag,Todo, db
 # authentication from flask jwd 
 from flask_jwt_extended import JWTManager
 
-#authentication expires when a users is logged in. 
+#authentication expires when a users is logged in.
 from datetime import timedelta
 #importation for backend. 
 
@@ -19,7 +19,7 @@ app = Flask(__name__)
 
 # #create a migration. config parameters
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 #initialize the router 
 migrate = Migrate(app,db)
