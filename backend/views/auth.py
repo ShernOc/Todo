@@ -20,10 +20,12 @@ def login():
     
     #check if password_hash by importing : from werkzeug.security import generate_password_hash
     #if user exist and check password hash, and password from the user, and database create a Token
+    #check_-password_hash( takes two arguments)
     if user and check_password_hash(user.password,password):
         #each token is linked to a user: they have different token
         
         access_token = create_access_token(identity=user.id)
+        # return jsonify({"Success": "Success done"})
         return jsonify({"access_token":access_token})
     
         # return jsonify({"Success": "Correct submission"}), 200

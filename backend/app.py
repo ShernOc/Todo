@@ -45,13 +45,10 @@ app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
 # 3. Add when the authorization will expire: 
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
 
-jwt = JWTManager(app) # instance of jwt 
+# instance of jwt 
+jwt = JWTManager(app) 
 #4.  initialize the jwt 
 jwt.init_app(app)
-
-
-
-
 
 
 #create the router 
