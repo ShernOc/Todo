@@ -9,10 +9,10 @@ from flask_jwt_extended import JWTManager
 from datetime import timedelta
 #importation for backend. 
 
-# import sys
-# from pathlib import Path
+import sys
+from pathlib import Path
 
-# sys.path.append(str(Path(__file__).parent.resolve()))
+sys.path.append(str(Path(__file__).parent.resolve()))
 
 #create a flask class 
 app = Flask(__name__)

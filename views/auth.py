@@ -37,13 +37,11 @@ def login():
         access_token = create_access_token(identity= str(user.id))
         # return jsonify({"Success": "Success done"})
         
-        print(access_token)
         return jsonify({"access_token":access_token}), 200
-    
     
         # return jsonify({"Success": "Correct submission"}), 200
     else: 
-        return jsonify({"Error": "Email/User is incorrect"}), 404
+        return jsonify({"Error": "No authentication Its a Scam"}), 404
     
     
     # Next go to Postman and add a Login request 
@@ -53,30 +51,30 @@ def login():
     # 2. protecting the route. 
     #     - import the jwt_required 
     # 3. create a current_user route ()
-# @auth_bp.route('/current_user', methods = ['GET'] )
-#   #Protect the route we use @jwt_required decorator, for any route that need protection.
-# @jwt_required()
-# def current_user(): 
-#     # to get the current user we use the get_jwt_identity. 
-#     # dont forget to import it.
-#     current_user_id =  get_jwt_identity()
+@auth_bp.route('/current_user', methods = ['GET'] )
+  #Protect the route we use @jwt_required decorator, for any route that need protection.
+@jwt_required()
+def current_user(): 
+    # to get the current user we use the get_jwt_identity. 
+    # dont forget to import it.
+    current_user_id =get_jwt_identity()
     
-#     # to get the current user
-#     user = User.query.get(current_user_id)
+    # to get the current user
+    user = User.query.get(current_user_id)
     
-#     # Go to what is needed to be filled from a User: 
-#     user_data = [{
-#             "id": user.id,
-#             "username":user.username,
-#             "email":user.email, 
-#             "is_approved":user.is_approved}]
+    # Go to what is needed to be filled from a User: 
+    user_data = [{
+            "id": user.id,
+            "username":user.username,
+            "email":user.email, 
+            "is_approved":user.is_approved}]
     
-#     return jsonify({"Current_user": user_data})
+    return jsonify({"Current_user": user_data})
     
-#     # print(current_user_id) # 
-#     #You have to pass the token to the jwt_required
+    # print(current_user_id) # 
+    #You have to pass the token to the jwt_required
     
-#     # Pass: Copy the token:Go to authorization: 
+    # Pass: Copy the token:Go to authorization- And Go to the Bearer Token and Paste the Token.     
     
     
     

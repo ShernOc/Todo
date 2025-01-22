@@ -111,7 +111,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 # 5. Create the login/ logout functions in the auth.py 
 
 #PROTECT THE ROUTES: 
-#Protected the with jwt_required, get_jwt_identity
+#Protected the with @jwt_required() get_jwt_identity
 # 5 To protect the route : jwt_required, get_jwt_identity: should be added in all the routes that need protections 
 
 # 1. import: from jwt_extended import jwt_required, get_jwt_identity

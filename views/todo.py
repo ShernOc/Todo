@@ -7,7 +7,7 @@ todo_bp = Blueprint('todo_bp', __name__)
 
 #================Todo=====SECTION === 
 #fetch all todos
-@todo_bp.route('/todos')
+@todo_bp.route('/todos', methods = ['GET'])
 @jwt_required()
 def get_todo():
     current_user_id = get_jwt_identity()
@@ -17,7 +17,6 @@ def get_todo():
     todos = Todo.query.filter_by(user_id = current_user_id)
     #create an empty list of tod 
     todo_list = []
-    
     for todo  in todos:
         todo_list.append({
             "id":todo.id,
@@ -34,9 +33,11 @@ def get_todo():
 
 #fetch one Todo based on id 
 @todo_bp.route('/todos/<int:id>')
+@jwt_required()
 def fetch_one_todo(id):
-    todo= Todo.query.get(id)
+    current_user_id = get_jwt_identity()
     
+    todo= Todo.query.filter_by(id, user_id = current_user_id).first|()
     if todo:
         return jsonify({
             "id":todo.id,
@@ -55,7 +56,6 @@ def fetch_one_todo(id):
   
 #Add a todo list 
 @todo_bp.route('/todos', methods= ['POST'])
-
 #jwt_required added for checking the user id 
 @jwt_required()
 def add_todo():
@@ -94,11 +94,16 @@ def add_todo():
     
 #Update a todo 
 @todo_bp.route('/todos/<todo_id>')
+@jwt_required()
 def update_todos(todo_id):
+    current_user_id = get_jwt_identity()
     #check if todo exists by query.get( which is a default using the get)
     todo= Tag.query.get(todo_id)
     
-    if todo: # if user exist
+    # if todo is there with its user_id allow that user to update the todo
+    #Thus: 
+    
+    if todo and todo.user_id == current_user_id: # if user exist
         #get the data 
         data = request.get_json()
         title = data.get('title', todo.title)
