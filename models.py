@@ -68,6 +68,15 @@ class Todo(db.Model):
     def __repr__(self):
         return f"Users('{self.title}', '{self.description}', '{self.is_complete}',{self.deadline} ,{self.user_id}, {self.tag_id})"
     
+    
+    #Logout Flask Model 
+class TokenBlocklist(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        jti = db.Column(db.String(36), nullable=False, index=True)
+        created_at = db.Column(db.DateTime, nullable=False)
+    
+    
+
      
     
     

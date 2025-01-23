@@ -263,11 +263,101 @@ const data{
 - HomePage displays the todo
  - const {todos}= UseContext(TodoContext)(
     return 
+    current user? 
+
     <div>
-    todos && todos.map(todo)=>(
+    { # curly brackets are used for javacode inside a react 
+
+    todos && todo.lengh < 1 && 
+    div >
+     You dont have Todos 
+     add a link for  <Link to = "/addtodos"> Created
+    }
+    todos && todo.map && todos.map(todo)=>(
         key={tod.id}>,
         hi> {todo.title}
         <p> {todo.deadline} </p>
     )
  )
 
+
+# THUSDAY 23/01/2025
+- Import {AuthContext} from '..Context/AuthoContext 
+
+    - remember to have the links:
+-Protecting the Route 
+
+# To make a Colums/Table For Table. 
+- Enclose the use the crid. 
+- Go to Tailwind (grid_template_Columns)
+        - grind cols-4 gap-4 
+# How to access the Tag 
+{todo.tag.name} # next style it.
+
+# Flex: To be in one line: 
+justify-between, 
+
+#vertivally: items-center 
+text-right: on the right corner 
+text-xs: Text to be small 
+
+is_complete()
+#have in a different paragraph with className= 
+{
+todo.is_complete ? # message ("Completed") : ("Not Complete")}
+
+arrow function <span>Onclick
+
+# DELETE: UseState: 
+- const Onchange, SetOnchange = SetState(false); 
+# 
+- Go to the add if its success: change it from false to true: 
+setOnchange({!OnChange}) ; negates the value to be false. 
+
+- 
+dynamic route 
+Route path "todo/:id"
+Link: to= {/todo/$tod.id} # direct to a single todo page. 
+
+
+Single: Todo: 
+useparam from react-router-dom
+
+1. filter the todo you already have 
+return (
+const{id} = UseParam()
+const {todo}=UseContext(TodoContext)
+const todo = {todo && todo.find((todo)=>todo.id==id)
+
+return 
+!todo && "Todo not found 
+)
+
+
+#Add a description: 
+ Access the delete: 
+ delete: to navigate to the homepage 
+ / initializec 
+ const onchnage 
+
+
+# HOMEWORK: 
+#UPDATE: the profile, 
+#Add a button: For deleting an Account: 
+# Chosing the projects: 
+
+ # Update/ Add are thE Same; the Session, 
+ # Need to Deploy the Page: 
+
+#Homework: 
+ #Choose the project: 
+ #Code Challenge
+ # Homework 
+ # Wk2 Day 10 : Pizza Resturant Homework : 
+
+
+
+
+
+    
+#backref: one to many relationship cohort: students

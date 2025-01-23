@@ -1,9 +1,13 @@
 #import the flask 
 from flask import Flask, jsonify, request 
 from flask_migrate import Migrate
-from models import User, Todo, Tag, db
+from models import db , TokenBlocklist
 # authentication from flask jwd 
 from flask_jwt_extended import JWTManager
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
+
 
 #authentication expires when a users is logged in.
 from datetime import timedelta
@@ -54,6 +58,15 @@ jwt.init_app(app)
 @app.route('/')
 def index():
     return "<h1>To-Do Application</h1> <p> This is an Todo Application that utilizes the Flask Packages</p> "
+
+#JWT_ 
+# Callback function to check if a JWT exists in the database blocklist
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
+    jti = jwt_payload["jti"]
+    token = db.session.query(TokenBlocklist.id).filter_by(jti=jti).scalar()
+
+    return token is not None
 
 
 

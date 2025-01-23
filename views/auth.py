@@ -1,7 +1,12 @@
 from flask import jsonify,request,Blueprint
-from models import db,User
+from models import db,User,TokenBlocklist
 from werkzeug.security import check_password_hash
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
+
+#time from jwt 
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 
 auth_bp= Blueprint('auth_bp', __name__)
 
@@ -79,3 +84,13 @@ def current_user():
     
     
  #logout function 
+@auth_bp.route("/logout", methods=["DELETE"])
+@jwt_required()
+def logout():
+    jti = get_jwt()["jti"]
+    now = datetime.now(timezone.utc)
+    db.session.add(TokenBlocklist(jti=jti, created_at=now))
+    db.session.commit()
+    return jsonify({"Success": "Logout successfuly"})
+
+
