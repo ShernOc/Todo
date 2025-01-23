@@ -78,10 +78,4 @@ def current_user():
     
     
     
-    
-    
-   
-    
-    
-     
-# #logout function 
+ #logout function 

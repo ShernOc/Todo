@@ -99,17 +99,17 @@ def update_todos(todo_id):
     current_user_id = get_jwt_identity()
     #check if todo exists by query.get( which is a default using the get)
     todo= Tag.query.get(todo_id)
+    data = request.get_json()
     
     # if todo is there with its user_id allow that user to update the todo
     #Thus: 
     
     if todo and todo.user_id == current_user_id: # if user exist
         #get the data 
-        data = request.get_json()
         title = data.get('title', todo.title)
         description = data.get('description', todo.description)
         tag_id = data('tag_id', todo.tag_id)
-        user_id = data('user_id', todo.user_id)
+        # user_id = data('user_id', todo.user_id)
         # is complete tells us if the todo is done 
         is_complete= data('is_complete', todo.is_complete)
         
@@ -128,24 +128,28 @@ def update_todos(todo_id):
             todo.description = description
             todo.tag_id = tag_id
             todo.deadline = deadline
-            todo.user_id = user_id
+            # removed because it's not needed. 
+            # todo.user_id = user_id
             todo.is_complete = is_complete
         
         #calling the function
             db.session.commit()
             return jsonify({"success": "todo updated successfully"})
     else:
-        return jsonify({"error":"todo doesn't exist"})
+        return jsonify({"error":"todo doesn't exist or not authorized k"})
            
 #DELETE Todo; 
 @todo_bp.route('/todos/<int:todo_id>', methods =['DELETE'])
+@jwt_required()
 def delete_todo(todo_id):
     #get the users
-    todos = Todo.query.get(todo_id)
+    current_user_id = get_jwt_identity()
+    # confirms if the delete is from the user. 
+    todos = Todo.query.filter_by( id = todo_id, user_id = current_user_id)
     if todos:
         db.session.delete(todos)
         db.session.commit()
         return jsonify({"Success Todo, successfully deleted"})
 
     else:
-         return jsonify({"Error": "Todo does not exist, Try again"})
+         return jsonify({"Error": "Not authorized to delete"})

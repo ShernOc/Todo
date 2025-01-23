@@ -1,13 +1,17 @@
 from flask import jsonify,request,Blueprint
 from models import db,Tag
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 tag_bp= Blueprint('tag_bp', __name__)
 
 #Fetch/Get Tags
 #fetch all tags
 @tag_bp.route('/tags')
+# protect the route 
+@jwt_required()
 def get_tags():
     #query.all gets all the tags 
+    # current_user_id = get_jwt_identity()
     tags = Tag.query.all()
     #created an empty list: 
     tag_list = []
