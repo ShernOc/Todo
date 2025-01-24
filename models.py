@@ -1,6 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
+#
+# from sqlalchemy_serializer import SerializerMixin
+# class User(db.Model, SerializerMixin):
+
+
 #What do they even mean? 
 metadata = MetaData()
 db = SQLAlchemy(metadata= metadata)
@@ -35,7 +40,7 @@ class User(db.Model):
         return f"User('{self.username}', '{self.email}', '{self.is_approved}',{self.password} ,{self.todos})" 
     
 # Tag Table
-class Tag(db.Model):
+class Tag(db.Model,):
     __tablename__ = "Tags"
     
     id = db.Column(db.Integer,primary_key = True)
@@ -45,7 +50,7 @@ class Tag(db.Model):
     todos = db.relationship("Todo", back_populates ="tag", lazy= True)
     
     def __repr__(self):
-        return f"Users('{self.name}')"
+        return f"Tag('{self.name}')"
     
 # To-do table :  
 class Todo(db.Model):

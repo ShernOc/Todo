@@ -24,10 +24,16 @@ sys.path.append(str(Path(__file__).parent.resolve()))
 app = Flask(__name__)
 
 # #create a migration. config parameters
+#Used to show the existing database 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
+
+# set to false to avoid building too much unhelpful data in memory when running the code. 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 #initialize the router 
 migrate = Migrate(app,db)
+#connects the database to the application before it runs 
 db.init_app(app)
 
 #import all the functions in views 
@@ -45,6 +51,7 @@ app.register_blueprint(auth_bp)
 # imports/ Configuration
 # 1. import the jwt (from flask_jwt_extended import JWTManager) 
 # 2. Setup the Flask-JWT-Extended extension
+
 app.config["JWT_SECRET_KEY"] = "sherlyne_Ochieng"
 
 # 3. Add when the authorization will expire: 
@@ -52,11 +59,12 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
 
 # instance of jwt 
 jwt = JWTManager(app) 
-#4.  initialize the jwt 
+#4.  initialize which resource are available at which url. 
 jwt.init_app(app)
 
 
 #create the router 
+#The route determines which route 
 @app.route('/')
 def index():
     return "<h1>To-Do Application</h1> <p> This is an Todo Application that utilizes the Flask Packages</p> "
@@ -98,7 +106,7 @@ def email():
         return "Message sent Successfully"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port = 5555)
     
     
 

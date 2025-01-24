@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash
 
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-
 #create a blueprint variable 
 #Blueprint(takes in two parameters, the name of blueprint and , __name__) 
 user_bp = Blueprint('user_bp', __name__)
@@ -53,10 +52,10 @@ def get_users():
 @user_bp.route('/users', methods=["POST"])
 def add_users():
     data = request.get_json() # This is an object in json 
-    username = data['username']
+    username =data['username']
     email = data['email']
-    password = data['password']
-    is_admin = data['is_admin']
+    password =data['password']
+    is_admin =data['is_admin']
     
 #3. Check if the users exists
     check_username = User.query.filter_by(username=username).first() # first selects the first username in order. 
@@ -70,7 +69,7 @@ def add_users():
     if check_username or check_email: 
         return jsonify({"error":"username/email already exist"}),406
     else:  # This is where we now add the new username
-        new_user = User(username = username, email = email, password = password )
+        new_user = User(username = username, email = email, password = password, is_admin = is_admin)
 #5. Next you now update/by calling the db.session.add(new_user) db.session.commit()
 
         db.session.add(new_user)
