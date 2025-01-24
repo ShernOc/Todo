@@ -41,7 +41,6 @@ def login():
     if user and check_password_hash(user.password , password):
         access_token = create_access_token(identity= str(user.id))
         # return jsonify({"Success": "Success done"})
-        
         return jsonify({"access_token":access_token}), 200
     
         # return jsonify({"Success": "Correct submission"}), 200
@@ -50,7 +49,7 @@ def login():
     
     
     # Next go to Postman and add a Login request 
-  
+
     #NEXT: GETTING THE CURRENT USER 
     # 1. Pass the token 
     # 2. protecting the route. 
@@ -70,11 +69,13 @@ def current_user():
     # Go to what is needed to be filled from a User: 
     user_data = [{
             "id": user.id,
+            "email":user.email,
             "username":user.username,
             "email":user.email, 
-            "is_approved":user.is_approved}]
+            "is_approved":user.is_approved,
+            "is_admin":user.is_admin}]
     
-    return jsonify({"Current_user": user_data})
+    return jsonify({"Current_user": user_data}),200
     
     # print(current_user_id) # 
     #You have to pass the token to the jwt_required
@@ -84,6 +85,12 @@ def current_user():
     
     
  #logout function 
+ # Go to jwt_revoke: 
+ # create a blocklist table for the logout. in the Model
+ # Have a callback function and copy it tothe app.py: to check if the app is revoked. 
+ # Go to the  
+#  - import the datetime, TokenBlocklist, (import datetime, TokenBlocklist from models )
+
 @auth_bp.route("/logout", methods=["DELETE"])
 @jwt_required()
 def logout():
@@ -91,6 +98,8 @@ def logout():
     now = datetime.now(timezone.utc)
     db.session.add(TokenBlocklist(jti=jti, created_at=now))
     db.session.commit()
-    return jsonify({"Success": "Logout successfuly"})
+    return jsonify({"Success": "Logout successfully"})
+
+
 
 

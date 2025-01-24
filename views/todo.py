@@ -1,5 +1,5 @@
 from flask import jsonify,request,Blueprint
-from models import db,Todo, User, Tag
+from models import db,Todo
 from datetime import datetime
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -14,9 +14,10 @@ def get_todo():
     #get all the todos 
     # todos = Todo.query.all()
     # this will allow us generate todo based on user alone with the token 
-    todos = Todo.query.filter_by(user_id = current_user_id)
+    todos = Todo.query.filter_by(user_id = current_user_id).first()
     #create an empty list of tod 
     todo_list = []
+     #in the append pass it as an json objects
     for todo  in todos:
         todo_list.append({
             "id":todo.id,
@@ -37,7 +38,7 @@ def get_todo():
 def fetch_one_todo(id):
     current_user_id = get_jwt_identity()
     
-    todo= Todo.query.filter_by(id, user_id = current_user_id).first|()
+    todo= Todo.query.filter_by(id, user_id = current_user_id).first()
     if todo:
         return jsonify({
             "id":todo.id,
@@ -45,7 +46,8 @@ def fetch_one_todo(id):
             "description":todo.description,
             "is_complete":todo.is_complete,
             "deadline":todo.deadline,
-            "user_id":todo.user_id,
+            #removed becuase of the user_id in 
+            # "user_id":todo.user_id,
             "tag_id": todo.tag_id,
             #this allows you to fetch just the user/ based on the id, or the username
             "user":{"id":todo.user.id, "username":todo.user.username,}
@@ -60,23 +62,27 @@ def fetch_one_todo(id):
 @jwt_required()
 def add_todo():
     #add/ get the current_user_id = get_jwt_identity()
+     # This is an object in json 
     current_user_id = get_jwt_identity()
     #initialize the data 
     data = request.get_json()
-    title = data.get('title')
-    description=data.get('description')
+    title = data['title']
+    description=data['description']
     # user_id=data.get('user_id') : removed now we only have to use current_user_id 
     
-    tag_id= data.get('tag_id')
+    tag_id= data['tag_id']
+    # or 
+    #  date= datetime(data['date'],'%Y-%m-%d') 
     try:
-        deadline = datetime.strptime(data.get('deadline'), "%Y-%m-%d %H:%M:%S")
+        deadline = datetime.strptime(data['deadline'], "%Y-%m-%d %H:%M:%S")
+        
     except ValueError:
         return jsonify({"error":"invalid datetime"})
     
     #check if they exist: 
     #removed because we dont need it
     # check_user_id = User.query.get(user_id)
-    check_tag_id = Tag.query.get(tag_id)
+    check_tag_id = Todo.query.get(tag_id)
     
     #if they dont exist, then 
     # if not check_user_id or not check_tag_id:
@@ -98,7 +104,7 @@ def add_todo():
 def update_todos(todo_id):
     current_user_id = get_jwt_identity()
     #check if todo exists by query.get( which is a default using the get)
-    todo= Tag.query.get(todo_id)
+    todo= Todo.query.get(todo_id)
     data = request.get_json()
     
     # if todo is there with its user_id allow that user to update the todo

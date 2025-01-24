@@ -13,9 +13,11 @@ user_bp = Blueprint('user_bp', __name__)
 
 #Fetch/Get Users 
 @user_bp.route('/users')
+@jwt_required()
 def get_users():
+    current_user_id=get_jwt_identity()
     #query.all gets all the users. 
-    users = User.query.all()
+    users = User.query.filter_by(user_id =current_user_id)
     #Convert users to json 
     #create an empty list that will store the users 
     user_list = []
